@@ -1,0 +1,20 @@
+#include<reg51.h>
+
+void delay(){
+	unsigned int i,j;
+	for(i=0; i<255; i++){
+		for (j=0; j<255; j++);
+	}
+}
+
+void main(){
+	unsigned char arr[10]={0xc0, 0xf9, 0xa4, 0xb0, 0x99, 0x92, 0x82, 0xf8, 0x80, 0x90};
+	unsigned int i;
+	
+	while(1){
+		for(i=0; i<10; i++){
+			P2 = arr[i];
+			delay();
+		}
+	}
+}

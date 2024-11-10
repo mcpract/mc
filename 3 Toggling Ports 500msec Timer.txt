@@ -1,0 +1,23 @@
+#include<reg51.h>
+
+// Function to create a delay
+void delay(){
+	TMOD = 0x10;  // Set Timer 1 in mode 1 (16-bit timer mode)
+	TL1 = 0xB0;    // Load the lower byte of Timer 1 (65536-50000= 15536)
+	TH1 = 0x3C;    // Load the upper byte of Timer 1
+	TR1 = 1;       // Start Timer 1
+	while(TF1 == 0);  // Wait until Timer 1 overflows (TF1 flag is set)
+	TR1 = 0;       // Stop Timer 1
+	TF1 = 0;       // Clear the overflow flag
+}
+
+void main(){
+	unsigned int i;
+	P3 = 0x55;  // Initialize Port 3 with the pattern 01010101
+	while(1){
+		P3 = ~P3;  // Invert the value of Port 3
+		for (i = 0; i < 10; i++){  // Create a delay in a loop
+			delay();  // Call the delay function
+		}
+	}
+}

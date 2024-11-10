@@ -1,0 +1,29 @@
+;Program to Transfer Data from one memory location to another(internal to internal)
+	  ORG 0000H;       Organize memory to 0000H
+	  MOV R0,#20H;     this will move 20H in R0
+	  MOV R1,#60H;     this will move 60h in R1
+	  MOV R2,#05H;     this is for counter set to 05(5)
+	
+AGAIN:MOV A,@R0;	   this will move memory location at R0 in Accumulator
+	  MOV @R1, A;      will move data to location present at R1 
+	  INC R0;          increment of R0
+	  INC R1;          increment of R1
+	  DJNZ R2,AGAIN;   if R2 is not zero then jump to Again block
+	  END;
+
+-----------------------------------------------------------------------------------
+
+;Program to Transfer Data from one memory location to another(internal to external)
+ORG 0000H              ; Set the origin of the program to address 0000H
+	MOV R0, #70H       ; Load the value 50H into register R0 (pointer to source data)
+	MOV DPTR, #0200H     ; Load the value 00H into DPTR (pointer to destination in external memory)
+	MOV R1, #05H       ; Load the value 05H into register R1 (counter for the loop)
+
+AGAIN: MOV A, @R0      ; Move the value at the address pointed by R0 into accumulator A
+       MOVX @DPTR, A   ; Move the value in accumulator A to the external memory address pointed by DPTR
+       INC R0          ; Increment R0 to point to the next source address
+       INC DPTR        ; Increment DPTR to point to the next destination address
+
+       DJNZ R1, AGAIN  ; Decrement R1 and jump back to AGAIN if R1 is not zero
+       END             ; End of the program
+	

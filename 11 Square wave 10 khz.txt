@@ -1,0 +1,21 @@
+#include<p18f4520.h>
+
+void delay(){
+	T0CON = 0x08; //TIMER0 16BIT NO PRESCALAR
+	TMR0H = 0xFF; 
+	TMR0L = 0x83; 
+	T0CONbits.TMR0ON=1;  //Timer on
+	while(INTCONbits.TMR0IF==0); // check until timer overflow
+	T0CONbits.TMR0ON=0;    //timer off
+	INTCONbits.TMR0IF=0;   //timer overflow flag set to 0
+}
+
+void main(){
+	TRISCbits.RC0 = 0;  // PORT c bit RC0 as Output
+	while(1){
+		PORTCbits.RC0=1;
+		delay();
+		PORTCbits.RC0=0;
+		delay();
+	}
+}

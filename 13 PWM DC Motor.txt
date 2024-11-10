@@ -1,0 +1,20 @@
+# include<p18f4520.h>
+void main()
+{
+	TRISC = 0xFB; // make CCP1 output Pin
+	TRISD = 0x80; // make RD7 input Pin
+	CCP1CON = 0x3C; //PWM Mode ,11 for DC1B1:B0
+	PR2 =100; // set period to 100*16/Fosc
+	T2CON = 0x01; //4 Prescaler, no postscaler
+	while (1)
+	{
+		if(PORTDbits.RD7==1)
+			CCPR1L=25; //25% duty Cycle
+		else
+			CCPR1L=50; //50% duty Cycle
+		TMR2=0x0;		// clear timer 2
+PIR1bits.TMR2IF=0; // Clear timer2 Flag
+T2CONbits.TMR2ON=1; // Start Timer 2
+while(PIR1bits.TMR2IF==0); //wait for end of period
+}
+}

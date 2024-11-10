@@ -1,0 +1,46 @@
+#include <p18f4520.h>
+
+#define Buzzer PORTAbits.RA3
+#define SW1 PORTBbits.RB0
+#define SW2 PORTBbits.RB1
+
+void delay(unsigned int time){
+    unsigned int i, j;
+    for (i = 0; i < time; i++){
+        for(j = 0; j < 135; j++);
+    }
+}
+
+void main(){
+    TRISA = 0x00;  // Set PORTA as output
+    TRISB = 0xFF;  // Set PORTB as input
+    TRISD = 0x00;  // Set PORTD as output
+
+    PORTD = 0x0F;
+    Buzzer = 0;
+    
+    while(1){
+        if(SW1){  // If SW1 is pressed
+            Buzzer = 1;
+            PORTD = 0x38;
+            delay(50);
+            PORTD = 0x34;
+            delay(50);  
+            PORTD = 0x32;
+            delay(50);  
+            PORTD = 0x31;
+            delay(50);      
+        }
+        if(SW2){  // If SW2 is pressed
+            Buzzer = 0;
+            PORTD = 0x01;
+            delay(50);
+            PORTD = 0x02;
+            delay(50);  
+            PORTD = 0x04;
+            delay(50);  
+            PORTD = 0x08;
+            delay(50);
+        }
+    }
+}
