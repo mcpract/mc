@@ -44,3 +44,54 @@ void main(){
         }
     }
 }
+
+
+---------------------------------------------------------------
+#include <p18f452.h>
+
+#define SWITCH1 PORTCbits.RC0
+#define SWITCH2 PORTCbits.RC1
+#define Buzzer PORTAbits.RA0
+#define Relay PORTAbits.RA2
+
+void delay(unsigned int time){
+    unsigned int i, j;
+    for (i = 0; i < time; i++){
+        for (j = 0; j < 710; j++);
+    }
+}
+
+void main(void) {
+    unsigned int i;
+
+    TRISA = 0x00;       // Set PORTA as output
+    TRISC = 0xFF;       // Set PORTC as input
+    TRISD = 0x00;       // Set PORTD as output
+    PORTA = 0x00;       // Initialize PORTA
+    PORTD = 0xFF;       // Initialize PORTD
+
+    Relay = 0;          // Initialize Relay to off
+    Buzzer = 0;         // Initialize Buzzer to off
+
+    while(1) {
+        if(SWITCH1) {
+            PORTA = 0xFF;       // Turn on all bits of PORTA
+            PORTD = 0x80;       // Set PORTD to start with the MSB
+            delay(50);
+            for(i = 0; i < 8; i++) {
+                PORTD = PORTD >> 1;  // Shift right through PORTD bits
+                delay(50);
+            }
+        }
+        
+        if(SWITCH2) {
+            PORTA = 0x00;       // Turn off all bits of PORTA
+            PORTD = 0x01;       // Set PORTD to start with the LSB
+            delay(50);
+            for(i = 0; i < 8; i++) {
+                PORTD = PORTD << 1;  // Shift left through PORTD bits
+                delay(50);
+            }
+        }
+    }
+}
